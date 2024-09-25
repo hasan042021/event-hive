@@ -11,7 +11,7 @@ const authSlice = createSlice({
   reducers: {
     userLogin: (state, action) => {
       state.token = action.payload.token;
-      state.user = action.payload.user_id;
+      state.user = action.payload.user;
     },
     // eslint-disable-next-line no-unused-vars
     userLoggedOut: (state, action) => {
