@@ -19,14 +19,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = [
-            "user",
-            "role",
-            "image",
-            "receive_email_notifications",
-            "receive_in_app_notifications",
-            "notification_frequency",
-        ]
+        fields = "__all__"
 
     def update(self, instance, validated_data):
         user_data = validated_data.get("user", {})

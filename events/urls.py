@@ -7,7 +7,7 @@ router = DefaultRouter()
 router.register("tags", views.TagViewSet)
 router.register("categories", views.CategoryViewSet)
 router.register("list", views.EventViewSet)
-router.register("rsvp", views.RSVPViewSet)
+router.register("rsvp-list", views.RSVPViewSet)
 urlpatterns = [
     path("", include(router.urls)),
 ]

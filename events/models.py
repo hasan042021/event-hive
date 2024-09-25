@@ -11,9 +11,15 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Event(models.Model):
@@ -36,8 +42,14 @@ class Event(models.Model):
     attendee_count = models.IntegerField(default=0)
     is_declined = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.id} {self.name}"
+
 
 class RSVP(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    attendee = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     is_accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Event Name : {self.event.name} - Attendee : {self.attendee.user.first_name}"

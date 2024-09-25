@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import Category, Tag, Event
+from .models import Category, Tag, Event, RSVP
+from members.models import UserProfile
+from django.contrib.auth.models import User
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -15,21 +17,51 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-
-    category = serializers.SlugRelatedField(read_only=True, slug_field="name")
-    tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
-
-    organizer = serializers.SerializerMethodField()
+    category = CategorySerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Event
         fields = "__all__"
 
     def get_organizer(self, obj):
-        return obj.organizer.user.username
+        return obj.organizer.user
+
+
+class RSVPEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = [
+            "name",
+            "date",
+            "time",
+            "location",
+            "thumbnail",
+        ]
+
+
+class RSVPUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+        ]
+
+
+class RSVPAttendeeSerializer(serializers.ModelSerializer):
+    user = RSVPUserSerializer(read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ["user", "image"]
 
 
 class RSVPSerializer(serializers.ModelSerializer):
+    event = RSVPEventSerializer(read_only=True)
+    attendee = RSVPAttendeeSerializer(read_only=True)
+
     class Meta:
-        model = Event
+        model = RSVP
         fields = "__all__"
