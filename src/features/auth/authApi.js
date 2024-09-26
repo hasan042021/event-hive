@@ -1,8 +1,6 @@
 import { apiSlice } from "../api/apiSlice";
 import { userLogin } from "./authSlice";
 
-const baseUrl = apiSlice.getBaseQuery().baseUrl;
-
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -15,6 +13,7 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           console.log("hello");
           const result = await queryFulfilled;
+          console.log(result);
           localStorage.setItem(
             "session",
             JSON.stringify({
@@ -22,17 +21,7 @@ export const authApi = apiSlice.injectEndpoints({
               user_id: result.data.user_id,
             })
           );
-          const res = await fetch(
-            `${baseUrl}members/list/${result.data.user_id}`
-          );
-          if (res.ok) {
-            const user_data = await res.json();
-            const data = {
-              token: result.data.token,
-              user: user_data,
-            };
-            dispatch(userLogin(data));
-          }
+          dispatch(userLogin(result.data));
         } catch (error) {
           console.log(error);
         }
@@ -55,17 +44,8 @@ export const authApi = apiSlice.injectEndpoints({
               user_id: result.data.user_id,
             })
           );
-          const res = await fetch(
-            `${baseUrl}members/list/${result.data.user_id}`
-          );
-          if (res.ok) {
-            const user_data = await res.json();
-            const data = {
-              token: result.data.token,
-              user: user_data,
-            };
-            dispatch(userLogin(data));
-          }
+
+          dispatch(userLogin(result.data));
         } catch (error) {
           console.log(error);
         }
@@ -73,3 +53,5 @@ export const authApi = apiSlice.injectEndpoints({
     }),
   }),
 });
+
+export const { useLoginMutation, useRegisterMutation } = authApi;

@@ -1,11 +1,22 @@
 import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Login from "./pages/authentication/Login";
+import Register from "./pages/authentication/Register";
+import Home from "./pages/Home";
+import useAuthCheck from "./hooks/useAuthCheck";
 
 function App() {
+  const authCheck = useAuthCheck();
+  console.log(authCheck);
   return (
-    <>
-      <h1 className="text-red-200 text-sm font-bold underline">Hello world!</h1>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+        {/* <Route path="/*" element={<StudentsOutlet />}> */}
+      </Routes>
+    </Router>
   );
 }
 
