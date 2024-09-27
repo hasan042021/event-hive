@@ -16,16 +16,31 @@ class TagSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class OrganizerUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+        ]
+
+
+class OrganizerProfileSerializer(serializers.ModelSerializer):
+    user = OrganizerUserSerializer(read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ["user"]
+
+
 class EventSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    organizer = OrganizerProfileSerializer(read_only=True)
 
     class Meta:
         model = Event
         fields = "__all__"
-
-    def get_organizer(self, obj):
-        return obj.organizer.user
 
 
 class RSVPEventSerializer(serializers.ModelSerializer):
