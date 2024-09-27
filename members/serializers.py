@@ -84,6 +84,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return account
 
 
+class UserDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+
+        fields = ["id", "role"]
+
+
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)

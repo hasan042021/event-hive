@@ -4,7 +4,7 @@ from . import views
 
 router = DefaultRouter()
 
-router.register("list", views.UserProfileViewSet)
+router.register("profiles", views.UserProfileViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("register/", views.UserRegistrationApiView.as_view(), name="register"),
@@ -12,4 +12,4 @@ urlpatterns = [
     path("logout/", views.UserLogoutView.as_view(), name="logout"),
     path("change_password/", views.ChangePasswordView.as_view(), name="change_pass"),
     path("active/<uid64>/<token>/", views.activate, name="activate"),
-]
+]   

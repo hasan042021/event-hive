@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer, UserDataSerializer
 from .models import UserProfile
 from django.shortcuts import render
 from rest_framework import viewsets, status
@@ -81,7 +81,15 @@ class UserLoginApiView(APIView):
                 print(token)
                 print(_)
                 login(request, user)
-                return Response({"token": token.key, "user_id": user.id})
+                user_profile = UserProfile.objects.get(user=user)
+                s_data = UserDataSerializer(user_profile).data
+
+                return Response(
+                    {
+                        "token": token.key,
+                        "user": s_data,
+                    }
+                )
             else:
                 return Response({"error": "Invalid Credential"})
         return Response(serializer.errors)
