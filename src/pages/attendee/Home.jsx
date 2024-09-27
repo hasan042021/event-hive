@@ -1,6 +1,7 @@
 import React from "react";
-import Layout from "./common/Layout";
-import UpdateProfile from "./attendee/UpdateProfile";
+
+import UpdateProfile from "./UpdateProfile";
+import Layout from "../../components/common/Layout";
 
 export default function Home() {
   return (

@@ -6,7 +6,7 @@ const useAuthCheck = () => {
   const dispacth = useDispatch();
   const [authCheck, setAuthChek] = useState(false);
   useEffect(() => {
-    const localAuth = localStorage.getItem("auth");
+    const localAuth = localStorage.getItem("session");
     console.log(localAuth);
     if (localAuth) {
       const auth = JSON.parse(localAuth);
@@ -15,6 +15,7 @@ const useAuthCheck = () => {
       }
       setAuthChek(true);
     }
+    setAuthChek(true);
   }, [dispacth, setAuthChek]);
   return authCheck;
 };

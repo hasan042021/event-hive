@@ -3,44 +3,44 @@ import { useLoginMutation } from "../../features/auth/authApi";
 import { useGetProfileQuery } from "../../features/profile/profileApi";
 import { useSelector } from "react-redux";
 import { userInfoSet } from "../../features/auth/authSlice";
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import Message from "../../components/common/Alert";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
-  const [login, { data: user, isLoading, isError, isSuccess }] =
+  const [open, setOpen] = useState(false);
+  const [login, { data: user, isLoading, error, isError, isSuccess }] =
     useLoginMutation();
-  const { data: userdata } = useGetProfileQuery(
-    isLoginSuccess ? user?.user_id : null,
-    {
-      skip: !isLoginSuccess,
+  const organizerLogin = useMatch("/organizer");
+  const navigate = useNavigate();
+  useEffect(() => {
+    // navigation after login
+    if (isSuccess) {
+      navigate("/");
     }
-  );
+  }, [isSuccess, organizerLogin, user]);
 
   useEffect(() => {
-    if (isSuccess) {
-      // Fetch profile data only if login is successful
-      setIsLoginSuccess(true);
+    if (isSuccess || isError) {
+      setOpen(true);
     }
-  }, [isSuccess]);
-  useEffect(() => {
-    userInfoSet(userdata);
-  }, [userdata]);
+  }, [isError, isSuccess]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
     console.log("Username:", username);
     console.log("Password:", password);
     login({ username, password });
   };
 
   return (
-    <div className="flex justify-center w-full items-center h-screen bg-gray-100">
-      <div className="w-full max-w-md p-4 bg-white rounded-lg shadow-md">
+    <div className="flex flex-col justify-center w-full items-center h-screen bg-gray-100">
+      <div className="w-80 max-w-md p-5 bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-4">Login</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col">
-            <label htmlFor="username" className="text-gray-700">
+            <label htmlFor="username" className="text-gray-700 text-start">
               Username
             </label>
             <input
@@ -53,7 +53,7 @@ export default function Login() {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="password" className="text-gray-700">
+            <label htmlFor="password" className="text-gray-700 text-start">
               Password
             </label>
             <input
@@ -65,12 +65,16 @@ export default function Login() {
               required
             />
           </div>
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600"
           >
             Login
           </button>
+          <p>
+            Don't have an Account? <Link to="/register">Sign Up</Link>
+          </p>
         </form>
       </div>
     </div>

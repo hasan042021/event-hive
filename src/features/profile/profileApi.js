@@ -6,15 +6,6 @@ export const profileApi = apiSlice.injectEndpoints({
     getProfile: builder.query({
       query: (id) => `members/profiles/${id}`,
       providesTags: ["User"],
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log(result.data);
-          dispatch(userInfoSet(result.data));
-        } catch (error) {
-          console.log(error);
-        }
-      },
     }),
     updateProfile: builder.mutation({
       query: ({ id, data }) => ({

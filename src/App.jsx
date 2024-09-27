@@ -1,22 +1,53 @@
 import "./App.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Login from "./pages/authentication/Login";
 import Register from "./pages/authentication/Register";
-import Home from "./pages/Home";
+import Home from "./pages/attendee/Home";
 import useAuthCheck from "./hooks/useAuthCheck";
+import { attendeePrivateRoutes, organizerPrivateRoutes } from "./routes/routes";
+import AttendeeOutlet from "./components/outlets/AttendeeOutlet";
+import OrganizerOutlet from "./components/outlets/OrganizerOutlet";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const authCheck = useAuthCheck();
-  console.log(authCheck);
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        {/* <Route path="/*" element={<StudentsOutlet />}> */}
-      </Routes>
-    </Router>
+  return !authCheck ? (
+    <p>Checking Authentication...</p>
+  ) : (
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/attendee/*" element={<AttendeeOutlet />}>
+            {attendeePrivateRoutes.map((atRoute) => (
+              <Route
+                path={atRoute.path}
+                key={name}
+                element={<atRoute.component />}
+              />
+            ))}
+          </Route>
+          <Route path="/organizer" element={<Home />} />
+          <Route path="/organizer/*" element={<OrganizerOutlet />}>
+            {organizerPrivateRoutes.map((orgRoute) => (
+              <Route
+                path={orgRoute.path}
+                key={name}
+                element={<orgRoute.component />}
+              />
+            ))}
+          </Route>
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

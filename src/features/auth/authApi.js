@@ -18,7 +18,7 @@ export const authApi = apiSlice.injectEndpoints({
             "session",
             JSON.stringify({
               token: result.data.token,
-              user_id: result.data.user_id,
+              user: result.data.user,
             })
           );
           dispatch(userLogin(result.data));
@@ -29,7 +29,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     register: builder.mutation({
       query: (data) => ({
-        url: "member/register/",
+        url: "members/register/",
         method: "POST",
         body: data,
       }),
@@ -41,7 +41,7 @@ export const authApi = apiSlice.injectEndpoints({
             "session",
             JSON.stringify({
               token: result.data.token,
-              user_id: result.data.user_id,
+              user: result.data.user,
             })
           );
 
