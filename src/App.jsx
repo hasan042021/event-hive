@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/authentication/Login";
 import Register from "./pages/authentication/Register";
-import Home from "./pages/attendee/Home";
+import Home from "./pages/Home";
 import useAuthCheck from "./hooks/useAuthCheck";
 import { attendeePrivateRoutes, organizerPrivateRoutes } from "./routes/routes";
 import AttendeeOutlet from "./components/outlets/AttendeeOutlet";

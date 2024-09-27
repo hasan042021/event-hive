@@ -65,4 +65,6 @@ export const {
   useGetFilteredEventsQuery,
   useGetOrganizersEventsQuery,
   useDeleteEventMutation,
+  useGetTagsQuery,
+  useGetCategoriesQuery,
 } = eventsApi;
