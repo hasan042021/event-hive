@@ -28,7 +28,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.user.email = user_data.get("email", instance.user.email)
         instance.user.save()
 
-        instance.role = validated_data.get("role", instance.role)
         instance.image = validated_data.get("image", instance.image)
         instance.receive_email_notifications = validated_data.get(
             "receive_email_notifications", instance.receive_email_notifications
