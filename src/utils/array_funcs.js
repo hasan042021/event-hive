@@ -9,3 +9,9 @@ export function findRelatedObjects(array1, array2) {
   });
   return relatedObjects;
 }
+
+export function findRSVP(data, eventId, userId) {
+  return data.find(
+    (rsvp) => rsvp.event.id == eventId && rsvp.attendee.id == userId
+  );
+}

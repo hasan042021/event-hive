@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetEventQuery,
   useUpdateEventMutation,
@@ -13,16 +13,55 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import Layout from "../../components/common/Layout";
+import {
+  useCreateRSVPMutation,
+  useGetCurrentEventRSVPQuery,
+  useGetRSVPsQuery,
+} from "../../features/RSVP/rsvpApi";
+import { useSelector } from "react-redux";
+import { findRSVP } from "../../utils/array_funcs";
 
 export default function SingleEvent() {
   const { eventId } = useParams();
-  console.log(eventId);
+
   const { data: event } = useGetEventQuery(eventId);
   const [updateEvent] = useUpdateEventMutation();
+  const [createRSVP] = useCreateRSVPMutation();
+  const [now, setNow] = useState(false);
+  const [params, setParams] = useState({});
+  const [status, setStatus] = useState();
 
-  const handleUpdate = () => {
+  const { id: user_id } = useSelector((state) => state.auth.user);
+  const { data: rsvp } = useGetRSVPsQuery();
+  useEffect(() => {
+    if (eventId && user_id) {
+      setNow(true);
+      console.log(eventId, user_id);
+    }
+  }, [eventId, user_id]);
+  const [found, setFound] = useState(false);
+
+  useEffect(() => {
+    if (rsvp?.length > 0 && eventId && user_id) {
+      console.log(rsvp.length, eventId, user_id);
+      const foundRSVP = findRSVP(rsvp, Number(eventId), user_id);
+
+      if (foundRSVP) {
+        setFound(true);
+        if (foundRSVP.is_accepted) setStatus("You have accepted it already");
+        else setStatus("You have declined the invitation");
+      }
+    }
+  }, [rsvp, eventId, user_id]);
+
+  const handleAccept = () => {
     const attendee_count = event.attendee_count + 1;
-    const body = { id: event.id, data: { attendee_count } };
+    const body = { id: event.id, data: { attendee_count: attendee_count } };
+    // updateEvent(body);
+    const body2 = { event: eventId, attendee: user_id, is_accepted: true };
+    // createRSVP(body2);
+    console.log(rsvp);
+    //
   };
 
   return (
@@ -49,14 +88,14 @@ export default function SingleEvent() {
               {event?.name}
             </Typography>
             <Typography color="gray" className="font-normal">
-              {event?.category.name}
+              {event?.category?.name}
             </Typography>
             <Typography color="gray" className="mb-8 font-normal">
               {event?.description}
             </Typography>
             <Typography>
               {event?.tags?.map((tag) => (
-                <Chip className="inline-block m-1" value={tag.name} />
+                <Chip className="inline-block m-1" value={tag?.name} />
               ))}
             </Typography>
             <a href="#" className="inline-block">
@@ -77,46 +116,52 @@ export default function SingleEvent() {
                 </svg>
               </Button>
             </a>
-            <div>
-              <Typography
-                variant="small"
-                className="flex items-end justify-center"
-                color="blue-gray"
-                onClick={handleAccept}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="green"
-                  class="size-5"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                accept
-              </Typography>
-              <Typography
-                className="flex items-end justify-center font-normal"
-                variant="small"
-                color="gray"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="red"
-                  class="size-5"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                decline
-              </Typography>
+            <div className="">
+              {!found ? (
+                <>
+                  <Typography
+                    variant="small"
+                    className="flex items-end justify-center cursor-pointer"
+                    color="blue-gray"
+                    onClick={handleAccept}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="green"
+                      class="size-5"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    accept
+                  </Typography>
+                  <Typography
+                    className="flex items-end justify-center font-normal cursor-pointer"
+                    variant="small"
+                    color="gray"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="red"
+                      class="size-5"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    decline
+                  </Typography>
+                </>
+              ) : (
+                <>{status}</>
+              )}
             </div>
           </CardBody>
         </Card>

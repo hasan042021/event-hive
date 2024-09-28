@@ -24,6 +24,16 @@ const rsvpApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["RSVPs"],
     }),
+    getCurrentEventRSVP: builder.query({
+      query: (filters) => ({
+        url: "events/rsvp-list/",
+        params: {
+          event__id: filters.id,
+          attendee__id: filters.id,
+        },
+      }),
+      providesTags: ["RSVP"],
+    }),
     createRSVP: builder.mutation({
       query: (data) => ({
         url: "events/rsvp-list/",
@@ -35,4 +45,9 @@ const rsvpApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetRSVPsQuery, useGetAttendeeRSVPsQuery } = rsvpApi;
+export const {
+  useGetRSVPsQuery,
+  useGetAttendeeRSVPsQuery,
+  useCreateRSVPMutation,
+  useGetCurrentEventRSVPQuery,
+} = rsvpApi;
