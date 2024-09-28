@@ -9,7 +9,7 @@ export const profileApi = apiSlice.injectEndpoints({
     }),
     updateProfile: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/members/profiles/${id}`,
+        url: `/members/profiles/${id}/`,
         method: "PATCH",
         body: data,
       }),

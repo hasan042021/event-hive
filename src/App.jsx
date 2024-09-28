@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Routes,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import Login from "./pages/authentication/Login";
 import Register from "./pages/authentication/Register";
@@ -13,9 +14,11 @@ import { attendeePrivateRoutes, organizerPrivateRoutes } from "./routes/routes";
 import AttendeeOutlet from "./components/outlets/AttendeeOutlet";
 import OrganizerOutlet from "./components/outlets/OrganizerOutlet";
 import NotFound from "./pages/NotFound";
+import { useEffect } from "react";
 
 function App() {
   const authCheck = useAuthCheck();
+
   return !authCheck ? (
     <p>Checking Authentication...</p>
   ) : (

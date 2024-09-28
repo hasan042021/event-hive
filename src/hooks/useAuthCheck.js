@@ -5,6 +5,7 @@ import { userLogin } from "../features/auth/authSlice";
 const useAuthCheck = () => {
   const dispacth = useDispatch();
   const [authCheck, setAuthChek] = useState(false);
+
   useEffect(() => {
     const localAuth = localStorage.getItem("session");
     console.log(localAuth);

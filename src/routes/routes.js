@@ -1,13 +1,10 @@
 import MyEvents from "../pages/attendee/MyEvents";
 import UpdateProfile from "../pages/attendee/UpdateProfile";
-import Home from "../pages/Home";
-import EventDetails from "../components/Home/EventDetails";
-import Events from "../components/Home/Events";
 import Attendees from "../pages/organizer/Attendees";
 import CreateEvent from "../pages/organizer/CreateEvent";
-import Dashboard from "../pages/organizer/Dashboard";
 import UpdateEvent from "../pages/organizer/UpdateEvent";
 import SingleEvent from "../pages/attendee/SingleEvent";
+import Dashboard from "../pages/organizer/Dashboard";
 
 export const attendeePrivateRoutes = [
   {
@@ -32,6 +29,11 @@ export const organizerPrivateRoutes = [
     path: "create-event",
     name: "Create Event",
     component: CreateEvent,
+  },
+  {
+    path: "profile",
+    name: "Update Details",
+    component: UpdateProfile,
   },
   {
     path: "update-event/:eventId",

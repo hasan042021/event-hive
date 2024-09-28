@@ -2,8 +2,7 @@ import React from "react";
 
 import UpdateProfile from "./attendee/UpdateProfile";
 import Layout from "../components/common/Layout";
-import Events from "../components/Home/Events";
-import EventDetails from "../components/Home/EventDetails";
+import Events from "../components/HomeEvents/Events";
 
 export default function Home() {
   return (

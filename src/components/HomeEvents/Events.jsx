@@ -9,10 +9,10 @@ export default function Events() {
     if (isSuccess) console.log(events);
   }, [isSuccess]);
   return (
-    <Card className="w-3/4">
+    <>
       {events?.length > 0
         ? events.map((event) => <EventDetails event={event} />)
         : ""}
-    </Card>
+    </>
   );
 }

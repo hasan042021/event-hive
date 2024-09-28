@@ -8,11 +8,22 @@ const eventsApi = apiSlice.injectEndpoints({
     }),
     getEvent: builder.query({
       query: (id) => `events/list/${id}`,
-      providesTags: (result, error, arg) => [{ type: "Events", id: arg }],
+      providesTags: (result, error, arg) => [
+        "Events",
+        { type: "Events", id: arg },
+      ],
+    }),
+    createEvent: builder.mutation({
+      query: (data) => ({
+        url: `/events/list/`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Events"],
     }),
     updateEvent: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/events/list/${id}`,
+        url: `/events/list/${id}/`,
         method: "PATCH",
         body: data,
       }),
@@ -22,8 +33,8 @@ const eventsApi = apiSlice.injectEndpoints({
       ],
     }),
     deleteEvent: builder.mutation({
-      query: ({ id }) => ({
-        url: `/events/list/${id}`,
+      query: (id) => ({
+        url: `/events/list/${id}/`,
         method: "DELETE",
       }),
       invalidatesTags: ["Events"],
@@ -67,4 +78,5 @@ export const {
   useDeleteEventMutation,
   useGetTagsQuery,
   useGetCategoriesQuery,
+  useCreateEventMutation,
 } = eventsApi;
