@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 # for sending email
 from django.core.mail import EmailMultiAlternatives
@@ -96,10 +97,14 @@ class UserLoginApiView(APIView):
 
 
 class UserLogoutView(APIView):
+
     def get(self, request):
+
+        print(request.user, "line 100")
+        print(request.auth, "line 101")
         request.user.auth_token.delete()
         logout(request)
-        return redirect("login")
+        return Response("Logged out successfully")
 
 
 class ChangePasswordView(APIView):

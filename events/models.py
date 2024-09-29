@@ -50,6 +50,7 @@ class RSVP(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     attendee = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     is_accepted = models.BooleanField(default=False)
+    is_declined = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Event Name : {self.event.name} - Attendee : {self.attendee.user.first_name}"
