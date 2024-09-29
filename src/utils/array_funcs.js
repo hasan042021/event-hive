@@ -15,3 +15,16 @@ export function findRSVP(data, eventId, userId) {
     (rsvp) => rsvp.event.id == eventId && rsvp.attendee.id == userId
   );
 }
+export function capitalizeFirstLetter(string) {
+  if (!string) return "";
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+export function capitalizeWords(str) {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+export function makeUppercase(str) {
+  return str.toUpperCase();
+}

@@ -9,9 +9,8 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: async (headers, { getState, endpoint }) => {
     const token = getState()?.auth?.token;
     if (token) {
-      headers.set("Authorization", `token ${token}`);
+      headers.set("Authorization", `Token ${token}`);
     }
-
     return headers;
   },
 });

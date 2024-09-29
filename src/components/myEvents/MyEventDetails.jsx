@@ -1,56 +1,48 @@
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import {
+  Avatar,
+  Button,
+  Card,
   List,
   ListItem,
   ListItemPrefix,
-  Avatar,
-  Card,
   Typography,
-  Chip,
-  Button,
 } from "@material-tailwind/react";
-
-import { Link } from "react-router-dom";
+import React from "react";
 import {
   convertTo12HourFormat,
   formatDate,
 } from "../../utils/date_time_format";
-import { useSelector } from "react-redux";
-export default function EventDetails({ event }) {
-  const {
-    id,
-    thumbnail,
-    category,
-    organizer,
-    name,
-    description,
-    tags,
-    time,
-    date,
-  } = event;
-  const state = useSelector((state) => state);
+import { Link } from "react-router-dom";
+import {
+  capitalizeFirstLetter,
+  capitalizeWords,
+} from "../../utils/array_funcs";
+
+export default function MyEventDetails({ event }) {
+  const { event: myevent, attendee } = event;
   return (
-    <Card className="w-full my-2 shadow-md">
+    <Card className="w-3/4 my-2">
       <List>
         <ListItem className="border flex items-center justify-between">
           <ListItemPrefix>
-            <Avatar size="xl" variant="rounded" src={thumbnail} />
+            <Avatar variant="circular" alt="candice" src={myevent.thumbnail} />
           </ListItemPrefix>
           <div>
             <Typography
-              className="font-bold text-cyan-800"
-              variant="h6"
+              className="font-bold text-blue-700"
+              variant="h4"
               color="gray-600"
             >
-              {name}
+              {capitalizeWords(myevent.name)}
             </Typography>
+          </div>
+          <div>
             <Typography
               variant="small"
               color="gray"
               className="italic font-normal"
             >
-              Organized by: {organizer.user.first_name}{" "}
-              {organizer.user.last_name}
+              Location: {myevent.location}
             </Typography>
           </div>
           <div>
@@ -69,7 +61,7 @@ export default function EventDetails({ event }) {
                   />
                 </svg>
 
-                {convertTo12HourFormat(time)}
+                {convertTo12HourFormat(myevent.time)}
               </span>
               <span className=" flex items-center justify-center">
                 <svg
@@ -87,27 +79,9 @@ export default function EventDetails({ event }) {
                   />
                 </svg>
 
-                {formatDate(date)}
+                {formatDate(myevent.date)}
               </span>
             </Typography>
-          </div>
-          <div>
-            {state?.auth?.user?.role == "organizer" ? (
-              ""
-            ) : (
-              <Button
-                size="sm"
-                color="blue"
-                className="capitalize  rounded-full"
-              >
-                <Link
-                  className="text-white font-bold hover:text-white"
-                  to={`attendee/events/${id}`}
-                >
-                  See Details
-                </Link>
-              </Button>
-            )}
           </div>
         </ListItem>
       </List>

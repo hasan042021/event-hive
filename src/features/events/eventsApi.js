@@ -39,12 +39,12 @@ const eventsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Events"],
     }),
-    getFilteredEvents: builder.query({
+    filterEvents: builder.query({
       query: (filters) => ({
         url: "events/list/",
         params: {
-          category__name: filters.category,
-          tags: filters.tags?.join(","),
+          category__slug: filters?.category,
+          tags__id: filters?.tag,
         },
       }),
       providesTags: ["Events"],
@@ -73,7 +73,7 @@ export const {
   useGetEventQuery,
   useGetEventsQuery,
   useUpdateEventMutation,
-  useGetFilteredEventsQuery,
+  useFilterEventsQuery,
   useGetOrganizersEventsQuery,
   useDeleteEventMutation,
   useGetTagsQuery,

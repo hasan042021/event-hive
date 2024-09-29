@@ -11,6 +11,7 @@ const rsvpApi = apiSlice.injectEndpoints({
         url: "events/rsvp-list/",
         params: {
           attendee__id: filters.id,
+          is_accepted: true,
         },
       }),
       providesTags: ["RSVPs"],
@@ -20,6 +21,7 @@ const rsvpApi = apiSlice.injectEndpoints({
         url: "events/rsvp-list/",
         params: {
           event__id: filters.id,
+          is_accepted: true,
         },
       }),
       providesTags: ["RSVPs"],
@@ -50,4 +52,5 @@ export const {
   useGetAttendeeRSVPsQuery,
   useCreateRSVPMutation,
   useGetCurrentEventRSVPQuery,
+  useGetRSVPbyEventQuery,
 } = rsvpApi;

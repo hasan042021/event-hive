@@ -28,6 +28,7 @@ export default function OrganizersEventDetails({ event }) {
     tags,
     time,
     date,
+    attendee_count,
   } = event;
   console.log(event);
   const handleDelete = (e, id) => {
@@ -49,8 +50,10 @@ export default function OrganizersEventDetails({ event }) {
               color="gray"
               className="italic font-normal"
             >
-              Organized by: {organizer.user.first_name}{" "}
-              {organizer.user.last_name}
+              <Link to={`/organizer/attendees/${id}`}>
+                {" "}
+                Total Attendees: {attendee_count}
+              </Link>
             </Typography>
           </div>
           <div>

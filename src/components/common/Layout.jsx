@@ -9,7 +9,9 @@ const Layout = ({ children }) => {
       <header className="navbar">
         <NavbarCustom />
       </header>
-      <main className="content">{children}</main>
+      <main className="content m-auto w-4/5 flex flex-col justify-center items-between">
+        {children}
+      </main>
 
       <footer className="footer">
         <Footer />

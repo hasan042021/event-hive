@@ -4,3 +4,7 @@
   /* padding: 2rem; */
   text-align: center;
 }
+body {
+  font-family: sans-serif;
+}
+/* Inter, system-ui, Avenir, */

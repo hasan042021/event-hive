@@ -1,18 +1,17 @@
 import React, { useEffect } from "react";
 import { useGetEventsQuery } from "../../features/events/eventsApi";
 import EventDetails from "./EventDetails";
-import { Card, List } from "@material-tailwind/react";
+import { Card, List, Typography } from "@material-tailwind/react";
 
-export default function Events() {
-  const { data: events, isLoading, isSuccess } = useGetEventsQuery();
-  useEffect(() => {
-    if (isSuccess) console.log(events);
-  }, [isSuccess]);
+export default function Events({ events }) {
+  console.log(events);
   return (
     <>
-      {events?.length > 0
-        ? events.map((event) => <EventDetails event={event} />)
-        : ""}
+      {events?.length == 0 ? (
+        <Typography>No Data Found</Typography>
+      ) : (
+        events?.map((event) => <EventDetails event={event} />)
+      )}
     </>
   );
 }

@@ -40,6 +40,7 @@ export default function SingleEvent() {
     }
   }, [eventId, user_id]);
   const [found, setFound] = useState(false);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     if (rsvp?.length > 0 && eventId && user_id) {
@@ -53,14 +54,22 @@ export default function SingleEvent() {
       }
     }
   }, [rsvp, eventId, user_id]);
+  useEffect(() => {
+    if (reload) window.location.reload();
+  }, [reload]);
 
   const handleAccept = () => {
-    const attendee_count = event.attendee_count + 1;
-    const body = { id: event.id, data: { attendee_count: attendee_count } };
-    // updateEvent(body);
+    const body = { id: event.id, data: { attendee_count: 1 } };
+    updateEvent(body);
     const body2 = { event: eventId, attendee: user_id, is_accepted: true };
-    // createRSVP(body2);
-    console.log(rsvp);
+    createRSVP(body2);
+    setReload(true);
+    //
+  };
+  const handleCancel = () => {
+    const body2 = { event: eventId, attendee: user_id, is_declined: true };
+    createRSVP(body2);
+    setReload(true);
     //
   };
 
@@ -143,6 +152,7 @@ export default function SingleEvent() {
                     className="flex items-end justify-center font-normal cursor-pointer"
                     variant="small"
                     color="gray"
+                    onClick={handleCancel}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
