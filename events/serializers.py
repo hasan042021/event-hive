@@ -79,9 +79,17 @@ class EventSerializer(serializers.ModelSerializer):
             category, created = Category.objects.get_or_create(pk=category_id)
             instance.category = category
         tags_data = request.data.get("tags")
+        print(tags_data)
         if tags_data:
-            tags = tags_data.split(",")
-            instance.tags.set(tags)
+            #     lst = tags_data[0]
+            #     tags = lst.split(",")
+            instance.tags.set(tags_data)
+        instance.name = validated_data.get("name", instance.name)
+        instance.date = validated_data.get("date", instance.date)
+        instance.description = validated_data.get("description", instance.description)
+        instance.time = validated_data.get("time", instance.time)
+        instance.location = validated_data.get("location", instance.location)
+        instance.thumbnail = validated_data.get("thumbnail")
         print(instance)
         instance.save()
         return instance

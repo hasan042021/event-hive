@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from rest_framework import viewsets
 from .serializers import UserProfileSerializer, UserDataSerializer
 from .models import UserProfile
@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from django.views.generic import View
 
 # for sending email
 from django.core.mail import EmailMultiAlternatives
@@ -35,12 +36,12 @@ class UserRegistrationApiView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()
-            print(user)
+
             token = default_token_generator.make_token(user)
-            print("token ", token)
+
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            print("uid ", uid)
-            confirm_link = f"http://127.0.0.1:8000/patient/active/{uid}/{token}"
+
+            confirm_link = f"http://127.0.0.1:8000/members/active/{uid}/{token}"
             email_subject = "Confirm Your Email"
             email_body = render_to_string(
                 "confirm_email.html", {"confirm_link": confirm_link}
@@ -63,7 +64,9 @@ def activate(request, uid64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        return redirect("login")
+        return HttpResponse(
+            "<div style='height:100vh;width:100vw;display:flex;align-items:center;justify-content:center'><h2>Your account is activated. Go to <a target='_blank' href='http://localhost:5173/login'>http://localhost:5173/login</a> to login</h2></div>"
+        )
     else:
         return redirect("register")
 
@@ -128,3 +131,7 @@ class ChangePasswordView(APIView):
                 {"message": "Password changed successfully"}, status=status.HTTP_200_OK
             )
         return Response(serializer.errors)
+
+
+class AcivatedView(View):
+    template_name = "activated.html"
