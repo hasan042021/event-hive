@@ -13,15 +13,16 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           console.log("hello");
           const result = await queryFulfilled;
-          console.log(result);
-          localStorage.setItem(
-            "session",
-            JSON.stringify({
-              token: result.data.token,
-              user: result.data.user,
-            })
-          );
-          dispatch(userLogin(result.data));
+          if (result?.data?.user) {
+            localStorage.setItem(
+              "session",
+              JSON.stringify({
+                token: result.data.token,
+                user: result.data.user,
+              })
+            );
+            dispatch(userLogin(result.data));
+          }
         } catch (error) {
           console.log(error);
         }
@@ -37,15 +38,7 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           console.log("hello");
           const result = await queryFulfilled;
-          localStorage.setItem(
-            "session",
-            JSON.stringify({
-              token: result.data.token,
-              user: result.data.user,
-            })
-          );
-
-          dispatch(userLogin(result.data));
+          console.log(result);
         } catch (error) {
           console.log(error);
         }
@@ -59,7 +52,6 @@ export const authApi = apiSlice.injectEndpoints({
           console.log(result.data);
           localStorage.clear();
           dispatch(userLoggedOut());
-          window.location.reload();
         } catch (error) {
           console.log(error);
         }

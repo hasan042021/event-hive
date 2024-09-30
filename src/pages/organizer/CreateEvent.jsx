@@ -7,6 +7,13 @@ import Layout from "../../components/common/Layout";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useGetProfileQuery } from "../../features/profile/profileApi";
+import {
+  Checkbox,
+  Textarea,
+  Typography,
+  Input,
+  Button,
+} from "@material-tailwind/react";
 
 export default function CreateEvent() {
   const [now, setNow] = useState(false);
@@ -60,136 +67,94 @@ export default function CreateEvent() {
 
   return (
     <Layout>
-      <div className="flex my-3 flex-col items-center justify-center">
+      <div className="flex my-3 text-start flex-col items-center justify-center">
         <form
           onSubmit={handleSubmit}
           className="w-1/2 p-3 shadow m-2 space-y-4 "
         >
-          {/* Name Input */}
-          <div className="flex flex-col">
-            <label htmlFor="name" className="text-gray-700 font-bold">
-              Event Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Event Name"
-              required
-            />
-          </div>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            variant="outlined"
+            label="Event Name"
+            placeholder="Event Name"
+          />
 
-          {/* Date Input */}
-          <div className="flex flex-col">
-            <label htmlFor="date" className="text-gray-700 font-bold">
-              Date
-            </label>
-            <input
-              type="date"
-              id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          {/* Time Input */}
-          <div className="flex flex-col">
-            <label htmlFor="time" className="text-gray-700 font-bold">
-              Time
-            </label>
-            <input
-              type="time"
-              id="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          {/* Location Input */}
-          <div className="flex flex-col">
-            <label htmlFor="location" className="text-gray-700 font-bold">
-              Location
-            </label>
-            <input
-              type="text"
-              id="location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="border 
- rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Event Location"
-              required
-            />
-          </div>
-
-          {/* Thumbnail Input*/}
-          <div className="flex flex-col">
-            <label htmlFor="thumbnail" className="text-gray-700 font-bold">
-              Thumbnail
-            </label>
-            <input
-              type="file"
-              id="thumbnail"
-              onChange={(e) => setThumbnail(e.target.files[0])}
-              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          {/* Description Text Area */}
-          <div className="flex flex-col">
-            <label htmlFor="description" className="text-gray-700 font-bold">
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="border  
- rounded-md px-4 py-2 h-24 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Event Description"
-              required
-            />
-          </div>
-
-          {/* Category Select */}
+          <Input
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            variant="outlined"
+            label="Date"
+            type="date"
+            placeholder="Date"
+          />
+          <Input
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            variant="outlined"
+            label="Time"
+            placeholder="Time"
+            type="time"
+          />
+          <Input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            variant="outlined"
+            label="Location"
+            placeholder="Location"
+          />
+          <Input
+            variant="outlined"
+            label="Thumbnail"
+            placeholder="Thubmnail"
+            onChange={(e) => setThumbnail(e.target.files[0])}
+            type="file"
+          />
+          <Textarea
+            variant="outlined"
+            label="Description"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
           <div className="flex flex-col">
             <label htmlFor="category" className="text-gray-700 font-bold">
-              Category
+              <Typography variant="h6">Category</Typography>
             </label>
             <select
-              id="category"
+              htmlFor="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
+              className="border font-sans rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               {categories?.map((cat) => {
-                return <option value={cat.id}>{cat.name}</option>;
+                return (
+                  <option className="font-sans" key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                );
               })}
             </select>
           </div>
 
-          {/* Tags Input */}
+          {/* Tags Input (assuming a multiple-select or tag input) */}
           <div className="flex flex-col">
-            <label htmlFor="tags" className="text-gray-700 font-bold">
-              Tags
+            <label htmlFor="tags" className="text-gray-700  font-bold">
+              <Typography variant="h6"> Tags</Typography>
             </label>
             <select
               id="tags"
-              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="border rounded-md px-4 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 border rounded bg-gray-50 overflow-y-scroll [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:bg-gray-200
+  [&::-webkit-scrollbar-thumb]:bg-blue-600
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
               multiple
               value={tags}
               onChange={handleTagChange}
             >
               {allTags?.map((tag) => (
-                <option key={tag.id} value={tag.id}>
+                <option key={tag.id} value={tag.id} className="font-sans">
                   {tag.name}
                 </option>
               ))}
@@ -197,26 +162,22 @@ export default function CreateEvent() {
           </div>
 
           {/* Is Public Checkbox */}
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="isPublic"
+
+          <div>
+            <Checkbox
               checked={isPublic}
               onChange={(e) => setIsPublic(e.target.checked)}
-              className="mr-2"
+              label={<Typography variant="h6">Is Public</Typography>}
             />
-            <label htmlFor="isPublic" className="text-gray-700 font-bold">
-              Is Public
-            </label>
           </div>
 
           {/* Submit Button */}
-          <button
+          <Button
             type="submit"
             className="bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700"
           >
             Create Event
-          </button>
+          </Button>
         </form>
       </div>
     </Layout>

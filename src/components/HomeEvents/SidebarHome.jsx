@@ -99,7 +99,7 @@ export function SidebarHome({
             ))}
           </ul>
         </div>
-        <Button onClick={reset} className="mx-2">
+        <Button type="submit" onClick={reset} className="mx-2">
           Reset
         </Button>
         <Button type="submit">Filter</Button>

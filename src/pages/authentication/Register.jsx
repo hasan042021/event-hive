@@ -9,7 +9,6 @@ export default function Register() {
   const [last_name, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("attendee");
-  const [open, setOpen] = useState(false);
   // Default to Organizer
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirmPassword] = useState("");
@@ -48,10 +47,8 @@ export default function Register() {
     register(formData);
   };
   useEffect(() => {
-    if (isSuccess || isError) {
-      setOpen(true);
+    if (isSuccess || isError || registerData) {
       resetForm();
-      console.log(typeof registerData);
     }
   }, [isError, isSuccess]);
   return (
@@ -199,14 +196,19 @@ text-sm text-start font-medium text-gray-700"
           Already Have an Account? <Link to="/login">Login</Link>
         </p>
         {isError ? (
-          <p className="border p-2 text-red-700">{error?.data}</p>
+          <p className="border p-2 text-red-700">{error?.data?.error}</p>
         ) : (
           ""
         )}
-        {isSuccess && typeof registerData == "string" ? (
-          <p className="border p-2 text-green-700">
-            Check Your Mail For Confirmation{" "}
+        {isSuccess && registerData?.username ? (
+          <p className="border p-2 text-red-700">
+            A User With that username already exists
           </p>
+        ) : (
+          ""
+        )}
+        {isSuccess && registerData?.error ? (
+          <p className="border p-2 text-green-700">{registerData?.error}</p>
         ) : (
           ""
         )}

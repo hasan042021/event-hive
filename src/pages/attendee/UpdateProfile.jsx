@@ -4,6 +4,7 @@ import {
   useUpdateProfileMutation,
 } from "../../features/profile/profileApi";
 import Layout from "../../components/common/Layout";
+import save from "../../assets/images/save.png";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -13,6 +14,7 @@ import {
   CardFooter,
   CardHeader,
   Checkbox,
+  Chip,
   Input,
   Option,
   Select,
@@ -25,6 +27,7 @@ import {
   capitalizeWords,
   makeUppercase,
 } from "../../utils/array_funcs";
+import ImageUpload from "../../components/common/ImageUpload";
 const FREQUENCY = [
   { id: "daily", name: "Daily" },
   { id: "weekly", name: "Weekly" },
@@ -45,6 +48,8 @@ export default function UpdateProfile() {
   const [notification, setNotification] = useState("");
   const [in_app, setInApp] = useState("");
   const [freq, setFreq] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   useEffect(() => {
     if (id) setNow(true);
   }, [id]);
@@ -75,61 +80,69 @@ export default function UpdateProfile() {
     };
     updateProfile({ id, data });
   }
+
+  const handleProfilePictureUpload = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", profilePicture);
+
+    // Send the data to the API
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    const body = { id: id, data: formData };
+    updateProfile(body);
+    setProfilePicture(null);
+    setSelectedImage(null);
+  };
   return (
     <Layout>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="col-span-2">
-          <CardHeader floated={false} className="h-80">
-            <img
-              className="h-96 w-full  rounded object-cover object-center shadow-xl shadow-blue-gray-900/50"
-              src={user?.image}
-              alt="profile image"
-            />
-          </CardHeader>
-          <CardBody className="text-center">
-            <Typography variant="h4" color="blue-gray" className="mb-2">
-              {capitalizeFirstLetter(user?.user.first_name)}{" "}
-              {capitalizeFirstLetter(user?.user.last_name)}
-            </Typography>
-            <Typography color="blue-gray" className="font-medium" textGradient>
-              {user?.role ? makeUppercase(user?.role) : ""}
-            </Typography>
-          </CardBody>
-          <CardFooter className="flex justify-center gap-7 pt-2">
-            <Tooltip content="Like">
+          <div className="flex my-2 flex-col justify-center items-center">
+            <div>
+              <img
+                className="h-60 w-60 rounded-full object-cover object-center shadow-xl shadow-blue-gray-900/50"
+                src={user?.image}
+                alt="profile image"
+              />
+            </div>
+            <CardBody>
+              <Typography variant="h4" color="blue-gray" className="mb-2">
+                {capitalizeFirstLetter(user?.user.first_name)}{" "}
+                {capitalizeFirstLetter(user?.user.last_name)}
+              </Typography>
               <Typography
-                as="a"
-                href="#facebook"
-                variant="lead"
-                color="blue"
+                color="blue-gray"
+                className="font-medium"
                 textGradient
               >
-                <i className="fab fa-facebook" />
+                {user?.role ? makeUppercase(user?.role) : ""}
               </Typography>
-            </Tooltip>
-            <Tooltip content="Follow">
-              <Typography
-                as="a"
-                href="#twitter"
-                variant="lead"
-                color="light-blue"
-                textGradient
-              >
-                <i className="fab fa-twitter" />
-              </Typography>
-            </Tooltip>
-            <Tooltip content="Follow">
-              <Typography
-                as="a"
-                href="#instagram"
-                variant="lead"
-                color="purple"
-                textGradient
-              >
-                <i className="fab fa-instagram" />
-              </Typography>
-            </Tooltip>
-          </CardFooter>
+            </CardBody>
+            <form onSubmit={handleProfilePictureUpload}>
+              <ImageUpload
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                setProfilePicture={setProfilePicture}
+              />
+              <div className="flex justify-center items-center ">
+                {profilePicture && (
+                  <Button
+                    variant="outlined"
+                    color="blue"
+                    type="submit"
+                    className="px-3 py-2"
+                  >
+                    <div className="flex w-full justify-center items-center">
+                      <img className="h-6 w-6" src={save} alt="" />
+                      <p>Save</p>
+                    </div>
+                  </Button>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
         <div className="flex col-span-2 flex-2 my-3 flex-col items-center justify-center">
           <form onSubmit={handleSubmit} className="p-3 w-full m-2 space-y-4">
@@ -169,13 +182,6 @@ export default function UpdateProfile() {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <Input
-              type="file"
-              id="image"
-              variant="static"
-              // Handle image upload here
-              onChange={(e) => setImage(e.target.files[0])}
-            />
             <hr />
             <Typography className="text-start items-center  flex justify-end  font-bold">
               Settings

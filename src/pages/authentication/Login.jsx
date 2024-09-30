@@ -9,23 +9,24 @@ import Message from "../../components/common/Alert";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [open, setOpen] = useState(false);
+  const [myerror, setMyerror] = useState("");
+
   const [login, { data: user, isLoading, error, isError, isSuccess }] =
     useLoginMutation();
   const organizerLogin = useMatch("/organizer");
   const navigate = useNavigate();
   useEffect(() => {
-    // navigation after login
-    if (isSuccess) {
+    if (isSuccess && user?.token) {
       navigate("/");
     }
-  }, [isSuccess, organizerLogin, user]);
+    setMyerror(user?.error);
+  }, [isSuccess, organizerLogin, user?.id]);
 
-  useEffect(() => {
-    if (isSuccess || isError) {
-      setOpen(true);
-    }
-  }, [isError, isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess || isError) {
+  //     setOpen(true);
+  //   }
+  // }, [isError, isSuccess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,6 +76,7 @@ export default function Login() {
           <p>
             Don't have an Account? <Link to="/register">Sign Up</Link>
           </p>
+          {myerror ? <p className="text-red-700 border">{myerror}</p> : ""}
         </form>
       </div>
     </div>

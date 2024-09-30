@@ -15,24 +15,43 @@ function NavList({ user, handleLogout }) {
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {!user ? (
-        <Typography
-          as="li"
-          variant="small"
-          color="blue-gray"
-          className="p-1 font-medium"
-        >
-          <Button
-            variant="outlined"
-            size="sm"
-            className="text-white flex items-center "
+        <>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="p-1 font-medium"
           >
-            <a href="">
-              <Link className="text-blue-300" to="/register">
-                sign in
+            <Button
+              variant="text"
+              size="sm"
+              color="gray"
+              className="text-white hover:text-white flex items-center "
+            >
+              <Link className="text-white-300 hover:text-white" to="/login">
+                Login
               </Link>
-            </a>
-          </Button>
-        </Typography>
+            </Button>
+          </Typography>
+          <Typography
+            as="li"
+            variant="small"
+            color="blue-gray"
+            className="p-1 font-medium"
+          >
+            <Button
+              variant="outlined"
+              size="sm"
+              className="text-white flex items-center "
+            >
+              <a href="">
+                <Link className="text-blue-300" to="/register">
+                  sign in
+                </Link>
+              </a>
+            </Button>
+          </Typography>
+        </>
       ) : user?.role == "attendee" ? (
         <>
           <Typography

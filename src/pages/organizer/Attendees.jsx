@@ -30,11 +30,15 @@ export default function Attendees() {
 
   return (
     <Layout>
-      <Card className="m-auto mt-5 w-4/5">
+      <Card className="m-auto shadow-none mt-5 w-4/5">
         <Typography variant="h6" color="blue-gray">
           Attendees of the event
         </Typography>
+        <hr />
         <List>
+          {rsvps?.length == 0 && (
+            <Typography variant="h4">No One Accepted it yet</Typography>
+          )}
           {rsvps?.map((r, idx) => (
             <ListItem key={idx}>
               <ListItemPrefix>
